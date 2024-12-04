@@ -1,3 +1,0 @@
-[phases]
-build = "npm install"
-start = "npm start"
