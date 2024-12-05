@@ -5,49 +5,44 @@ const UserPosts = ({ userId }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1); // Track the current page
-  const [hasMore, setHasMore] = useState(true); // Track if there are more posts to load
   const isAuthenticated = IsAuthenticated();
 
-  const fetchUserPosts = async (currentPage) => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/posts/by/${userId.replace(":","")}?page=${currentPage}&limit=5`,
-        {
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      try {
+        console.log("Fetching posts for User ID:", userId);
+        console.log("Auth Token:", isAuthenticated.token);
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/by/${userId.replace(":", "")}`, {
           method: "GET",
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${isAuthenticated.token}`,
           },
+        });
+
+        console.log("Response status:", response.status);
+        const data = await response.json();
+        console.log("Fetched data:", data);
+
+        if (response.ok) {
+          setPosts(data);
+        } else {
+          setError(data.error || "Failed to fetch posts.");
         }
-      );
-
-      const data = await response.json();
-      if (response.ok) {
-        setPosts((prevPosts) => [...prevPosts, ...data.posts]); // Append new posts
-        setHasMore(data.currentPage < data.totalPages); // Check if more pages are available
-      } else {
-        setError(data.error || "Failed to fetch posts.");
+      } catch (err) {
+        console.error("Network error:", err);
+        setError("Network error. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Network error:", err);
-      setError("Network error. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchUserPosts(page); // Fetch posts for the initial page
-  }, [page]);
+    fetchUserPosts();
+  }, [userId]);
 
-  const loadMorePosts = () => {
-    if (hasMore) {
-      setPage((prevPage) => prevPage + 1); // Load the next page
-    }
-  };
-
-  if (loading && posts.length === 0) {
+  if (loading) {
+    // Show loading spinner while fetching posts
     return (
       <div className="text-center">
         <div className="spinner-border text-primary" role="status">
@@ -58,7 +53,13 @@ const UserPosts = ({ userId }) => {
   }
 
   if (error) {
+    // Show error message if an error occurs
     return <p className="text-danger">{error}</p>;
+  }
+
+  if (posts.length === 0) {
+    // Show a message if no posts are available
+    return <p>No posts available.</p>;
   }
 
   return (
@@ -80,13 +81,6 @@ const UserPosts = ({ userId }) => {
           <button className="btn btn-outline-secondary btn-sm">Comment</button>
         </div>
       ))}
-      {hasMore && (
-        <div className="text-center mt-3">
-          <button onClick={loadMorePosts} className="btn btn-primary">
-            Load More
-          </button>
-        </div>
-      )}
     </div>
   );
 };
