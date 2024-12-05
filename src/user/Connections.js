@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../assest/css/main.css"; // Custom CSS
+import { IsAuthenticated } from "../auth";
 
 const Connections = () => {
   const [users, setUsers] = useState([]);
+  const isAuthenticated = IsAuthenticated();
+  const [connections, setConnections] = React.useState([]); // Current user's connections
 
   // Fetch connections
   const fetchConnections = async () => {
