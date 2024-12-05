@@ -95,10 +95,10 @@ const Menu = () => {
               {/* Menu Items */}
               <li>
                 <NavLink
-                to={`/user/edit/:${isAuthenticated.user._id}`}>
-                  <a href="#" className="dropdown-item">
-                    <i className="fas fa-cog me-2"></i> Edit Profile
-                  </a>
+                  to={`/user/edit/${isAuthenticated.user._id}`}
+                  className="dropdown-item"
+                >
+                  <i className="fas fa-cog me-2"></i> Edit Profile
                 </NavLink>
               </li>
               <hr />
