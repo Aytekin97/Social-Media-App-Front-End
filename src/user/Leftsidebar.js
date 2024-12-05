@@ -25,9 +25,13 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
         const data = await response.json();
         if (response.ok) {
           console.log("Post count fetched")
-          console.log(data)
-          console.log(data.length)
-          setPostCount(data.length || 0); // Update post count
+          // Ensure it's a proper array
+          const postsArray = Array.isArray(data) ? data : Object.values(data);
+
+          console.log("Posts array:", postsArray);
+          console.log("Posts count:", postsArray.length);
+
+          setPostCount(postsArray.length || 0); // Update post count
         } else {
           console.error(data.error || "Failed to fetch posts count");
         }
