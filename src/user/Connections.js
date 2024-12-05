@@ -5,8 +5,9 @@ import { IsAuthenticated } from "../auth";
 
 const Connections = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
   const isAuthenticated = IsAuthenticated();
-  const [connections, setConnections] = React.useState([]); // Current user's connections
+  const [connections, setConnections] = useState([]); // Current user's connections
 
   // Fetch connections
   const fetchConnections = async () => {
@@ -74,15 +75,28 @@ const Connections = () => {
         }
       } catch (err) {
         console.error("Network error:", err);
+      } finally {
+        setLoading(false); // Stop loading after data fetch
       }
     };
 
     fetchUsers();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="container mt-4 text-center">
+        <h2>Loading...</h2>
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container mt-4">
-      <h2>All Users</h2>
+      <h2>Your Connections</h2>
       <div className="row">
         {users.length > 0 ? (
           users.map((user) => (
@@ -99,11 +113,16 @@ const Connections = () => {
                   <p className="text-muted">
                     Joined: {new Date(user.createddate).toDateString()}
                   </p>
-                  <Link className={({ isActive }) =>
-                      isActive ? "btn btn-primary btn-sm mt-2 active" : "btn btn-primary btn-sm mt-2"
-                    }  to={`/user/profile/${user._id}`}>
-                        view profile
-                      </Link>   
+                  <Link
+                    className={({ isActive }) =>
+                      isActive
+                        ? "btn btn-primary btn-sm mt-2 active"
+                        : "btn btn-primary btn-sm mt-2"
+                    }
+                    to={`/user/profile/${user._id}`}
+                  >
+                    View Profile
+                  </Link>
                 </div>
               </div>
             </div>
