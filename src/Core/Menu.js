@@ -96,7 +96,6 @@ const Menu = () => {
               <li>
                 <NavLink
                   to={`/user/edit/${isAuthenticated.user._id}`}
-                  className="dropdown-item"
                 >
                   <i className="fas fa-cog me-2"></i> Edit Profile
                 </NavLink>
