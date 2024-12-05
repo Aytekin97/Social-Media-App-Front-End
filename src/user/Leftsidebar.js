@@ -26,8 +26,8 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
         if (response.ok) {
           console.log("Post count fetched")
           console.log(data)
-          console.log(data.count)
-          setPostCount(data.count || 0); // Update post count
+          console.log(data.length)
+          setPostCount(data.length || 0); // Update post count
         } else {
           console.error(data.error || "Failed to fetch posts count");
         }
