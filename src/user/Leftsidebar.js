@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../assest/avatar7.png";
 import "../assest/css/main.css"; // Custom CSS
