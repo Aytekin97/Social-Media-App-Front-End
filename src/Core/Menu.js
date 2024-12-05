@@ -56,10 +56,9 @@ const Menu = () => {
      {isAuthenticated && (
         <div className="menu d-flex align-items-center gap-3">         
           <div className="icon">
-          <NavLink to="/explorer">
-         <i className="fas fa-search"></i>
-        </NavLink>
-           
+            <NavLink to="/explorer">
+              <i className="fas fa-search"></i>
+            </NavLink>          
           </div>
           <div className="icon">
             <i className="fas fa-bell"></i>
@@ -88,16 +87,19 @@ const Menu = () => {
                 <NavLink className={({ isActive }) =>
                       isActive ? "btn btn-primary btn-sm mt-2 active" : "btn btn-primary btn-sm mt-2"
                     }  to={`/user/:${isAuthenticated.user._id}`}>
-                        my profile
+                        My Profile
                       </NavLink>                
                 </div>
               </li>
               <hr />
               {/* Menu Items */}
               <li>
-                <a href="#" className="dropdown-item">
-                  <i className="fas fa-cog me-2"></i> Settings
-                </a>
+                <NavLink
+                to={`/user/edit/:${isAuthenticated.user._id}`}>
+                  <a href="#" className="dropdown-item">
+                    <i className="fas fa-cog me-2"></i> Edit Profile
+                  </a>
+                </NavLink>
               </li>
               <hr />
               <li>
