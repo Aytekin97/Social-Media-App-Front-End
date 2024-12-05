@@ -9,11 +9,13 @@ import { IsAuthenticated } from "../auth";
 const Leftsidebar = ({ user = {}, onSignout }) => {
    const isAuthenticated = IsAuthenticated();
    const [postCount, setPostCount] = useState(0); // State for post count
+   const [connectionsCount, setConnectionsCount] = useState(0); // State for total connections
 
    useEffect(() => {
+    // Fetch post count
     const fetchPostCount = async () => {
       try {
-        console.log("Fetching posts")
+        console.log("Fetching posts");
         const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/by/${user._id}`, {
           method: "GET",
           headers: {
@@ -22,15 +24,11 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
             Authorization: `Bearer ${isAuthenticated.token}`,
           },
         });
+
         const data = await response.json();
         if (response.ok) {
-          console.log("Post count fetched")
-          // Ensure it's a proper array
+          console.log("Post count fetched");
           const postsArray = Array.isArray(data) ? data : Object.values(data);
-
-          console.log("Posts array:", postsArray);
-          console.log("Posts count:", postsArray.length);
-
           setPostCount(postsArray.length || 0); // Update post count
         } else {
           console.error(data.error || "Failed to fetch posts count");
@@ -40,52 +38,77 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
       }
     };
 
+    // Fetch connections count
+    const fetchConnectionsCount = async () => {
+      try {
+        console.log("Fetching connections");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/connections/${user._id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${isAuthenticated.token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          console.log("Connections fetched:", data);
+          console.log(data.length)
+          setConnectionsCount(data.length || 0); // Update connections count
+        } else {
+          console.error(data.error || "Failed to fetch connections count");
+        }
+      } catch (err) {
+        console.error("Error fetching connections count:", err.message);
+      }
+    };
+
     if (user._id) {
       fetchPostCount();
+      fetchConnectionsCount();
     }
-    }, [user._id, isAuthenticated.token]);
-    if (!user || Object.keys(user).length === 0) {
-      // Render a fallback if user is null or empty
-      return <div>Loading Sidebar...</div>;
-    }
-    const handleDelete = () => {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This action will delete your profile!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(
-              `${process.env.REACT_APP_API_URL}/user/${user._id}`,
-              {
-                method: "DELETE",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${isAuthenticated.token}`,
-                },
-              }
-            );  
-            const data = await response.json();
-            if (response.ok) {
-              Swal.fire("Deleted!", data.message || "Your account has been deleted.", "success");
-              localStorage.removeItem("token");
-              onSignout(); // Sign out the user
-            } else {
-              Swal.fire("Error!", data.error || "Failed to delete account.", "error");
-            }
-          } catch (err) {
-            Swal.fire("Error!", "Network error: " + err.message, "error");
+  }, [user._id, isAuthenticated.token]);
+
+  if (!user || Object.keys(user).length === 0) {
+    return <div>Loading Sidebar...</div>;
+  }
+
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action will delete your profile!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/user/${user._id}`, {
+            method: "DELETE",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${isAuthenticated.token}`,
+            },
+          });
+          const data = await response.json();
+          if (response.ok) {
+            Swal.fire("Deleted!", data.message || "Your account has been deleted.", "success");
+            localStorage.removeItem("token");
+            onSignout(); // Sign out the user
+          } else {
+            Swal.fire("Error!", data.error || "Failed to delete account.", "error");
           }
+        } catch (err) {
+          Swal.fire("Error!", "Network error: " + err.message, "error");
         }
-      });
-    };    
+      }
+    });
+  };    
 
   return (
     <div className="col-md-3">
@@ -100,10 +123,10 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
             <span>{postCount}</span> Post
           </div>
           <div>
-            <span>2.5K</span> Followers
+            <span>{connectionsCount}</span> Followers
           </div>
           <div>
-            <span>365</span> Following
+            <span>{connectionsCount}</span> Following
           </div>
         </div>
         <ul>

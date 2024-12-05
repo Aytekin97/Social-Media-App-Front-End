@@ -36,6 +36,35 @@ const Users = () => {
     fetchUsers();
   }, []);
 
+  // Handle Add Friend
+  const handleAddFriend = async (targetUserId) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/connection/${targetUserId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${isAuthenticated.token}`, // Auth token
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(`Successfully added connection with user ID: ${targetUserId}`);
+        alert("Friend added successfully!");
+      } else {
+        console.error("Error adding friend:", data.error || "Unknown error");
+        alert(data.error || "Failed to add friend.");
+      }
+    } catch (err) {
+      console.error("Network error:", err.message);
+      alert("An error occurred while adding the friend.");
+    }
+  };
+
   return (
     <div className="col-md-3">
       <div className="follow-card">
@@ -52,7 +81,11 @@ const Users = () => {
                 {/* <p>{user.email}</p> */}
                 <p>{new Date(user.createddate).toDateString()}</p>
               </div>
-              <div className="action">
+              <div
+                className="action"
+                onClick={() => handleAddFriend(user._id)} // Add friend on click
+                style={{ cursor: "pointer" }} // Make it look clickable
+              >
                 <i className="fas fa-plus"></i>
               </div>
             </div>
