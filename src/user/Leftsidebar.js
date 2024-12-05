@@ -8,6 +8,34 @@ import { IsAuthenticated } from "../auth";
 
 const Leftsidebar = ({ user = {}, onSignout }) => {
    const isAuthenticated = IsAuthenticated();
+   const [postCount, setPostCount] = useState(0); // State for post count
+
+   useEffect(() => {
+    const fetchPostCount = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/by/${user._id}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${isAuthenticated.token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setPostCount(data.count || 0); // Update post count
+        } else {
+          console.error(data.error || "Failed to fetch posts count");
+        }
+      } catch (err) {
+        console.error("Error fetching posts count:", err.message);
+      }
+    };
+
+    if (user._id) {
+      fetchPostCount();
+    }
+    }, [user._id, isAuthenticated.token]);
     if (!user || Object.keys(user).length === 0) {
       // Render a fallback if user is null or empty
       return <div>Loading Sidebar...</div>;
@@ -61,7 +89,7 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
         <p>{new Date(user.createddate).toDateString()}</p>
         <div className="stats">
           <div>
-            <span>256</span> Post
+            <span>{postCount}</span> Post
           </div>
           <div>
             <span>2.5K</span> Followers
