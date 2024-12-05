@@ -71,8 +71,14 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
           </div>
         </div>
         <ul>
-          <li className="disabled">
-            <i className="fas fa-home"></i> Feed
+          <li>
+            <i className="fas fa-home"></i> 
+            <Link
+              className="text-dark text-decoration-none"
+              to={`/`}
+            >
+              Feed
+            </Link>
           </li>
           <li className="disabled">
             <i className="fas fa-user-friends"></i> Connections

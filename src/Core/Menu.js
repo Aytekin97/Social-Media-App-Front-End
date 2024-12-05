@@ -4,7 +4,7 @@ import avatar from "../assest/avatar7.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "../assest/css/main.css"; // Custom CSS
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { IsAuthenticated, signout } from "../auth";
 
 const Menu = () => {
@@ -22,7 +22,9 @@ const Menu = () => {
   <div className="secondary-nav d-flex justify-content-center align-items-center">
   <div className="search-container me-3">
     <div className="px-3">
-    <img src={logo} alt="logo" height="60" />
+      <Link>
+        <img src={logo} alt="logo" height="60"/>
+      </Link>
     </div>
     <input type="text" placeholder="Search..." />
   </div>
