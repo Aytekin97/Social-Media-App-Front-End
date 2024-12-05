@@ -13,6 +13,7 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
    useEffect(() => {
     const fetchPostCount = async () => {
       try {
+        console.log("Fetching posts")
         const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/by/${user._id}`, {
           method: "GET",
           headers: {
@@ -23,6 +24,7 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
         });
         const data = await response.json();
         if (response.ok) {
+          console.log("Post count fetched")
           setPostCount(data.count || 0); // Update post count
         } else {
           console.error(data.error || "Failed to fetch posts count");
