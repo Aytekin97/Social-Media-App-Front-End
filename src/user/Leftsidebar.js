@@ -139,8 +139,13 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
               Feed
             </Link>
           </li>
-          <li className="disabled">
-            <i className="fas fa-user-friends"></i> Connections
+          <li>
+            <Link
+              className="text-dark text-decoration-none"
+              to={`/connections/${user._id}`}
+            >
+            <i className="fas fa-user-friends"></i> Connections                         
+            </Link>
           </li>
           <li className="disabled">
             <i className="fas fa-globe"></i> Latest News
@@ -154,13 +159,12 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
           <li className="disabled">
             <i className="fas fa-bell text-red"></i> Notifications
           </li>
-          <li>
-            <i className="fas fa-cog"></i>
+          <li>        
             <Link
               className="text-dark text-decoration-none"
               to={`/user/edit/${user._id}`}
             >
-              Edit Profile
+              <i className="fas fa-cog"></i> Edit Profile
             </Link>
           </li>    
           <li>
