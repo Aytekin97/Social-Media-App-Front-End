@@ -22,7 +22,7 @@ const Menu = () => {
   <div className="secondary-nav d-flex justify-content-center align-items-center">
   <div className="search-container me-3">
     <div className="px-3">
-      <Link>
+      <Link to="/">
         <img src={logo} alt="logo" height="60"/>
       </Link>
     </div>

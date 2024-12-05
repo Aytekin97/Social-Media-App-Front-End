@@ -75,7 +75,7 @@ const Leftsidebar = ({ user = {}, onSignout }) => {
             <i className="fas fa-home"></i> 
             <Link
               className="text-dark text-decoration-none"
-              to={`/`}
+              to="/"
             >
               Feed
             </Link>
