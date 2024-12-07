@@ -1,7 +1,12 @@
 import React from "react";
 import backjpg from "../assest/back.jpg";
 import Explorer from "../Allposts/Explorer";
+import { IsAuthenticated} from "../auth";
+
 const Home = () => {
+
+  const isAuthenticated = IsAuthenticated();
+
   return (
   <>      
  <div className="hero-section position-relative h-60">
@@ -13,9 +18,12 @@ const Home = () => {
   </div>
 </div>
  <div className="container mt-4">
- <div className="row">   
- <Explorer  />
- </div>
+    {isAuthenticated && (
+      <div className="row">   
+        <Explorer  />
+      </div>
+    )}
+   
 </div>
   </>
   );
