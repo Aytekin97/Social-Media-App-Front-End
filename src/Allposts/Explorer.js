@@ -17,6 +17,7 @@ const Explorer = () => {
           },
         });
         const data = await response.json();
+        console.log(data)
         if (data.error) {
           console.error("Error fetching posts:", data.error);
         } else {
