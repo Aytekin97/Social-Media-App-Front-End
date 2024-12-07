@@ -61,7 +61,11 @@ const Explorer = () => {
                   <div className="card-body">
                     <p className="text-muted">
                       Posted By:{" "}
-                      <Link to={`/user/${post.postedBy._id}`}>{post.postedBy.name}</Link>
+                      {post.postedBy ? (
+                        <Link to={`/user/${post.postedBy._id}`}>{post.postedBy.name}</Link>
+                      ) : (
+                        "Unknown"
+                      )}
                     </p>
                     <p className="text-muted">
                       {post.body.substring(0, 10)} . . . .
