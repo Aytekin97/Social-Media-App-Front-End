@@ -80,7 +80,9 @@ const Connections = () => {
           );
 
           setUsers(filteredUsers);
-          console.log(users)
+          console.log("Users: ", users)
+          console.log("filtered users: ", filteredUsers)
+          console.log("connectionsIds: ", connectionsIds)
         }
       } catch (err) {
         console.error("Network error:", err);
