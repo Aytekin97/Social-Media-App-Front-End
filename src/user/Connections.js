@@ -27,12 +27,20 @@ const Connections = () => {
 
       if (response.ok) {
         console.log("Fetched connections:", data);
-        return data.map((connection) => {
-          // Return IDs of connected users
+        let filteredData=[];
+        for (const connection of data) {
+          if (
+            connection.user1._id === isAuthenticated.user._id || connection.user2._id === isAuthenticated.user._id
+          ) {
+            filteredData.push(connection);
+          }
+        }
+        const connectedUserIds = filteredData.map((connection) => {
           return connection.user1._id === isAuthenticated.user._id
             ? connection.user2._id
             : connection.user1._id;
         });
+        return connectedUserIds
       } else {
         console.error("Failed to fetch connections:", data.error);
         return [];
@@ -71,7 +79,7 @@ const Connections = () => {
               !connectionsIds.includes(user._id) // Exclude connected users
           );
 
-          setUsers(filteredUsers.slice(0, 5)); // Limit to the first 5 users
+          setUsers(filteredUsers);
         }
       } catch (err) {
         console.error("Network error:", err);
