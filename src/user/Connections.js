@@ -76,13 +76,9 @@ const Connections = () => {
           const filteredUsers = data.users.filter(
             (user) =>
               user._id !== isAuthenticated.user._id && // Exclude the current user
-              !connectionsIds.includes(user._id) // Exclude connected users
+              connectionsIds.includes(user._id) // Exclude connected users
           );
-
           setUsers(filteredUsers);
-          console.log("Users: ", users)
-          console.log("filtered users: ", filteredUsers)
-          console.log("connectionsIds: ", connectionsIds)
         }
       } catch (err) {
         console.error("Network error:", err);
